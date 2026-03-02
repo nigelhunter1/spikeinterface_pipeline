@@ -485,7 +485,6 @@ def get_opto_ts(analog_events, nidq_t_aligned, idx=None, pwrs=None, plot=False):
             ts_idx.append(f"{i}_off_{level}")
     return ts_list, ts_idx
 
-
 #for each start tone timestamp, find the closest outcome tone timestamp that follows
 def parse_trials(start_tone_ts, outcome_tone_ts, lick_ts, require_first_licks=True):
     #for each timestamp in outcome_tone_ts, find the closest timestamp in start_tone_ts that is less than it
@@ -750,6 +749,16 @@ def get_binary_signals(base_folder=None, dinmap=None,ainmap=None, optoidx=None, 
         opto_ts_list, opto_ts_idx = get_opto_ts(analog_events, nidq_t_aligned, idx=ainmap, pwrs=optoidx, plot=plot)
         ts_list += opto_ts_list
         ts_idx += opto_ts_idx
+
+    if ('chrimson' in dinmap.keys()):
+        chrimson_ts_list, chrimson_ts_idx = get_digital_ts(digital_events, map2imectime, time_support, dinmap['chrimson'], event_name='chrimson')
+        ts_list += chrimson_ts_list
+        ts_idx += chrimson_ts_idx
+
+    if ('chr2' in dinmap.keys()):
+        chr2_ts_list, chr2_ts_idx = get_digital_ts(digital_events, map2imectime, time_support, dinmap['chr2'], event_name='chr2')
+        ts_list += chr2_ts_list
+        ts_idx += chr2_ts_idx
 
     ts_numbers = [i for i in range(len(ts_list))]
     ts_dict = dict(zip(ts_numbers, ts_list))
